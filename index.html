@@ -14,6 +14,11 @@
       console.log('ledOff');
     };
 
+    function servo(pin,pos) {
+      socket.emit('servo',{component:"servo",pin:pin,pos:pos});
+      console.log('servo '+pin+' '+pos);
+    };
+
     socket.on('board',function(data) {
       console.log(data);
     });
@@ -29,5 +34,11 @@
   <br>
   <button onclick="ledOn(5,100)">LED 5 100</button>
   <button onclick="ledOff(5)">LED 5 OFF</button>
+  <br>
+  <button onclick="servo(9,'min')">Servo 9 Min</button>
+  <button onclick="servo(9, 45)">Servo 9 45</button>
+  <button onclick="servo(9, 90)">Servo 9 90</button>
+  <button onclick="servo(9, 135)">Servo 9 135</button>
+  <button onclick="servo(9,'max')">Servo 9 Max</button>
   </body>
 </html>

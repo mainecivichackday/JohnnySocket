@@ -27,6 +27,10 @@ io.sockets.on('connection', function(socket) {
     tcpClients[0].write(JSON.stringify(data));
     console.log(data);
   });
+  socket.on('servo',function(data) {
+    console.log(data);
+    tcpClients[0].write(JSON.stringify(data));
+  });
 });
 
 // Pass TCP events to socket.io
@@ -52,7 +56,7 @@ var server = net.createServer(function(c) { //'connection' listener
   //c.pipe(c);
   tcpClients.push(c);
 });
-server.listen(8124, function() {
+server.listen(8130, function() {
   console.log('TCP server bound');
 });
 

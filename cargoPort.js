@@ -2,7 +2,6 @@ var five = require("johnny-five");
 var board  = new five.Board();
 var util = require('util'),
     net = require('net');
-
 // Global variables for active digital pins.
 var pins   = [9, 10, 11],
     servos = [];
@@ -62,12 +61,21 @@ board.on("ready", function() {
   client.on('data', function(data) {
     var data = JSON.parse(data.toString());
     console.log('Received TCP data: '+util.inspect(data));
-    var servo = getServo(data.pin);
-    if (data.action === 'move') {
-      console.log('moving '+led.name+' to position '+data.position+'.');
-      servo.write(data.position);
-    } else if (data.action === 'off') {
+
+    if (data.component == 'servo') {
+      var servo = getServo(data.pin);
+      if (data.pos === 'min') {
+        console.log('moving '+servo.name+' to min.');
+        servo.max();
+      } else if (data.pos === 'max') {
+        console.log('moving '+servo.name+' to max.');
+        servo.min();
+      } else {
+        console.log('moving '+servo.name+' to '+ data.pos+'.');
+        servo.move(data.pos);
+      }
     }
+
    // client.end();
   });
 
