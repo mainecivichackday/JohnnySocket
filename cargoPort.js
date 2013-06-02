@@ -5,24 +5,58 @@ var util = require('util'),
 // Global variables for active digital pins.
 var BOOM = 13,
     HOIST = 11,
-    SHIP = 12,
+    BOAT = 12,
     TRUCK = 10,
     MAGNET = 9;
-var SERVOS   = [BOOM, HOIST, SHIP, TRUCK];
+var SERVOS   = [BOOM, HOIST, BOAT, TRUCK];
     jServos = [];
+
+function makeServo(opts) {
+  var servo = new five.Servo(opts);
+  servo.name = opts.pin;
+  servo.on("move",function(err,degrees) {
+    console.log('>>>> Servo '+servo.name+' at '+degrees);
+    servo.pos = degrees;
+  });
+  jServos.push(servo);
+  console.log('created Servo on pin '+opts.pin);
+  return servo;
+}
 
 // Initialize array of Servo objects.
 function setServos() {
-  for (i in SERVOS) {
-    var pin = SERVOS[i];
-    var servo = new five.Servo(pin);
-    servo.name = pin;
-    servo.on("move",function(err,degrees) {
-      console.log('>>>> Servo '+servo.name+' at '+degrees);
-    });
-    jServos.push(servo);
-    console.log('created Servo on pin '+pin);
-  };
+  //BOOM
+  var boomOpts = {pin:BOOM,
+                  range:[0,90],
+                  type:"standard",
+                  //startAt:90,
+                  center:false};
+  var boom = makeServo(boomOpts);
+  boom.move(90);
+  //HOIST
+  var hoistOpts = {pin:HOIST,
+                  range:[0,180],
+                  type:"standard",
+                  //startAt:0,
+                  center:false};
+  var hoist = makeServo(hoistOpts);
+  hoist.move(180);
+  //BOAT
+  var boatOpts = {pin:BOAT,
+                  range:[0,360],
+                  type:"continuous",
+                  //startAt:0,
+                  center:false};
+  var boat = makeServo(boatOpts);
+  //boat.move(89);
+  //TRUCK
+  var truckOpts = {pin:TRUCK,
+                  range:[0,360],
+                  type:"continuous",
+                  //startAt:0,
+                  center:false};
+  var truck = makeServo(truckOpts);
+  truck.move(0);
 }
 
 // Find Servo given a pin
@@ -71,17 +105,30 @@ board.on("ready", function() {
       var udkCommand = data.toString();
       console.log('udkCommand: '+udkCommand);
       if (udkCommand == 'LEFT') {
+        var boom = getServo(BOOM);
+        console.log('CURRENT POS: '+boom.pos+'.');
+        boom.min();
         console.log('moving to Left.');
       } else if (udkCommand == 'RIGHT') {
+        var boom = getServo(BOOM);
+        console.log('CURRENT POS: '+boom.pos+'.');
+        boom.max();
         console.log('moving to Right.');
       } else if (udkCommand == 'UP') {
         var hoist = getServo(HOIST);
+        console.log('CURRENT POS: '+hoist.pos+'.');
         hoist.max();
         console.log('moving upward.');
       } else if (udkCommand == 'DOWN') {
         var hoist = getServo(HOIST);
+        console.log('CURRENT POS: '+hoist.pos+'.');
         hoist.min();
         console.log('moving downward.');
+      } else if (udkCommand == 'BOAT') {
+        var boat = getServo(BOAT);
+        console.log('CURRENT POS: '+boat.pos+'.');
+        boat.write(boat.pos+15);
+        console.log('bon voyage!');
       } else {
         var data = JSON.parse(data.toString());
         console.log('Received TCP JSON data: '+util.inspect(data));
