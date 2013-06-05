@@ -64,6 +64,15 @@ var server = net.createServer(function(c) { //'connection' listener
       } else if ( udkCommand == 'DOWN' ) {
         console.log('UDK DOWN');
         tcpClients[0].write('DOWN');
+      } else if ( udkCommand == 'TRUCK' ) {
+        console.log('UDK TRUCK');
+        tcpClients[0].write('TRUCK');
+      } else if ( udkCommand == 'BOAT' ) {
+        console.log('UDK BOAT');
+        tcpClients[0].write('BOAT');
+      } else if ( udkCommand == 'MAGNET' ) {
+        console.log('UDK MAGNET');
+        tcpClients[0].write('MAGNET');
       } else {
         //Not a UDK command.
         var data = JSON.parse(data.toString());
