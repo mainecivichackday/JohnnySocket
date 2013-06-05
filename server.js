@@ -11,7 +11,7 @@ var serv = http.createServer(function (req, res) {
     // Serve files!
         file.serve(req, res);
     });
-}).listen(1337, '127.0.0.1');
+}).listen(1350, 'awesomesauce.me');
 
 // Initialize Socket.io
 var io = require('socket.io').listen(serv);
@@ -48,16 +48,42 @@ var server = net.createServer(function(c) { //'connection' listener
   });
 
   c.on('data', function(data) {
-    var data = JSON.parse(data.toString());
-    console.log(data);
-    heartbeat(data);
+    try
+    {
+      //Is is a UDK command or a JSON object?
+      var udkCommand = data.toString();
+      if ( udkCommand == 'LEFT') {
+        console.log('UDK LEFT');
+        tcpClients[0].write("LEFT");
+      } else if ( udkCommand == 'RIGHT' ) {
+        console.log('UDK RIGHT');
+        tcpClients[0].write('RIGHT');
+      } else if ( udkCommand == 'UP' ) {
+        console.log('UDK UP');
+        tcpClients[0].write('UP');
+      } else if ( udkCommand == 'DOWN' ) {
+        console.log('UDK DOWN');
+        tcpClients[0].write('DOWN');
+      } else {
+        //Not a UDK command.
+        var data = JSON.parse(data.toString());
+        if (data == 'undefined') {
+          console.log('Recieved garbage.');
+        } else {
+          console.log(data);
+          heartbeat(data);
+        }
+      }
+    } catch (er) {
+      console.log('Cannot parse garbage.');
+    }
   });
 
   //c.pipe(c);
   tcpClients.push(c);
 });
-server.listen(8130, function() {
+server.listen(7124, function() {
   console.log('TCP server bound');
 });
 
-console.log('Server running at http://127.0.0.1:1337/');
+console.log('HTTP Server running at http://127.0.0.1:1350/');

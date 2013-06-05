@@ -11,16 +11,38 @@ var BOOM = 13,
 var SERVOS   = [BOOM, HOIST, BOAT, TRUCK];
     jServos = [];
 
+var boomInterval;
+
 function makeServo(opts) {
   var servo = new five.Servo(opts);
   servo.name = opts.pin;
-  servo.on("move",function(err,degrees) {
-    console.log('>>>> Servo '+servo.name+' at '+degrees);
+  servo.on('move',function(err,degrees) {
+    console.log('>>>> Servo '+servo.label+' at '+degrees);
     servo.pos = degrees;
   });
   jServos.push(servo);
   console.log('created Servo on pin '+opts.pin);
   return servo;
+}
+
+function mover() {
+  var boat = getServo(BOAT);
+  boat.move(89);
+  var boom = getServo(BOOM);
+  boom.move(90);
+  var hoist = getServo(HOIST);
+  hoist.move(180);
+  var truck = getServo(TRUCK);
+  truck.move(0);
+  console.log('Move fired');
+  //setInterval(printCurrentPos,1000);
+}
+
+function printCurrentPos() {
+  for (i in jServos) {
+    var servo = jServos[i];
+    console.log('SERVO: '+servo.label+' CURRENT POS: '+servo.pos);
+  }
 }
 
 // Initialize array of Servo objects.
@@ -32,7 +54,8 @@ function setServos() {
                   //startAt:90,
                   center:false};
   var boom = makeServo(boomOpts);
-  boom.move(90);
+  boom.label = "BOOM";
+  boom.pos = 90;
   //HOIST
   var hoistOpts = {pin:HOIST,
                   range:[0,180],
@@ -40,7 +63,7 @@ function setServos() {
                   //startAt:0,
                   center:false};
   var hoist = makeServo(hoistOpts);
-  hoist.move(180);
+  hoist.label = "HOIST";
   //BOAT
   var boatOpts = {pin:BOAT,
                   range:[0,360],
@@ -48,7 +71,7 @@ function setServos() {
                   //startAt:0,
                   center:false};
   var boat = makeServo(boatOpts);
-  //boat.move(89);
+  boat.label = "BOAT";
   //TRUCK
   var truckOpts = {pin:TRUCK,
                   range:[0,360],
@@ -56,7 +79,9 @@ function setServos() {
                   //startAt:0,
                   center:false};
   var truck = makeServo(truckOpts);
-  truck.move(0);
+  truck.label = "TRUCK";
+  console.log('Move in 3 seconds...');
+  setTimeout(mover(),3000);
 }
 
 // Find Servo given a pin
@@ -78,6 +103,29 @@ function heartbeat(details,client) {
   console.log(JSON.stringify(details));
   client.write(JSON.stringify(details));
 }
+
+function goToZero(servo) {
+  console.log('goToZero '+servo.pos);
+  console.log('goToZero '+servo.toString());
+  if (servo.pos > 20) {
+    servo.move(servo.pos-5);
+    servo.pos=servo.pos-5;
+  } else {
+    clearInterval(boomInterval);
+  }
+}
+
+function goToMax(servo) {
+  console.log('goToMax '+servo.pos);
+  console.log('goToMax '+servo.toString());
+  if (servo.pos < 160) {
+    servo.move(servo.pos+5);
+    servo.pos=servo.pos+5;
+  } else {
+    clearInterval(boomInterval);
+  }
+}
+
 
 // Define arduino behavior.
 board.on("ready", function() {
@@ -107,13 +155,15 @@ board.on("ready", function() {
       if (udkCommand == 'LEFT') {
         var boom = getServo(BOOM);
         console.log('CURRENT POS: '+boom.pos+'.');
-        boom.min();
+        //boom.min();
         console.log('moving to Left.');
+        boomInterval = setInterval(goToZero,300,boom);
       } else if (udkCommand == 'RIGHT') {
         var boom = getServo(BOOM);
         console.log('CURRENT POS: '+boom.pos+'.');
         boom.max();
         console.log('moving to Right.');
+        boomInterval = setInterval(goToMax,300,boom);
       } else if (udkCommand == 'UP') {
         var hoist = getServo(HOIST);
         console.log('CURRENT POS: '+hoist.pos+'.');
