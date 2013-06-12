@@ -55,9 +55,15 @@ var server = net.createServer(function(c) { //'connection' listener
       if ( udkCommand == 'LEFT') {
         console.log('UDK LEFT');
         tcpClients[0].write("LEFT");
+      } else if ( udkCommand == 'LEFTOFF') {
+        console.log('UDK LEFTOFF');
+        tcpClients[0].write("LEFTOFF");
       } else if ( udkCommand == 'RIGHT' ) {
         console.log('UDK RIGHT');
         tcpClients[0].write('RIGHT');
+      } else if ( udkCommand == 'RIGHTOFF' ) {
+        console.log('UDK RIGHTOFF');
+        tcpClients[0].write('RIGHTOFF');
       } else if ( udkCommand == 'UP' ) {
         console.log('UDK UP');
         tcpClients[0].write('UP');
