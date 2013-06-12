@@ -102,7 +102,7 @@ function heartbeat(details,client) {
 }
 
 function goToZero(servo) {
-  console.log('goToZero {'+servo.pos+','+servo.label+'}');
+  console.log('goToZero {'+servo.pos+','+servo.label+','+servo.steps+'}');
   if (servo.pos > 0) {
     servo.move(servo.pos-servo.increment);
     servo.pos=servo.pos-servo.increment;
@@ -113,7 +113,7 @@ function goToZero(servo) {
 }
 
 function goToMax(servo) {
-  console.log('goToMax {'+servo.pos+','+servo.label+'}');
+  console.log('goToMax {'+servo.pos+','+servo.label+','+servo.steps+'}');
   if (servo.pos < 180) {
     servo.move(servo.pos+servo.increment);
     servo.pos=servo.pos+servo.increment;
