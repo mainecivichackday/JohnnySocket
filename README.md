@@ -6,9 +6,13 @@ Mashing Socket.io &amp; JohnnyFive, using TCP with UDK to hit JohnnyFive.
 
 Overview
 --------
-This project demonstrates the ability to control an arduino unit with a webpage.
+This project demonstrates the ability to control an arduino unit with a webpage and with TCP Messages from UDK:
 
-Web page ---> HTTP server / TCP Server ---> TCP Client / JohnnyFive Arduino controller ---> Arduino
+    Web page --------\ 
+                      |
+                      |--> HTTP server / TCP Server ---> TCP Client / JohnnyFive Arduino controller ---> Arduino
+                      |
+    UDK interface ---/ 
 
 Components
 ----------
