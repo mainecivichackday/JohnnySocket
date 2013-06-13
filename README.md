@@ -1,8 +1,8 @@
 JohnnySocket
 ============
 Powering museum exhibits over the internet with JohnnyFive, Node.js, Socket.io, and Unreal Development Kit.
-
-Mashing Socket.io &amp; JohnnyFive
+===
+Mashing Socket.io &amp; JohnnyFive, using TCP with UDK to hit JohnnyFive.
 
 Overview
 --------
