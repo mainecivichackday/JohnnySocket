@@ -1,5 +1,6 @@
 JohnnySocket
 ============
+Powering museum exhibits over the internet with JohnnyFive, Node.js, Socket.io, and Unreal Development Kit.
 
 Mashing Socket.io &amp; JohnnyFive
 
@@ -12,12 +13,13 @@ Web page ---> HTTP server / TCP Server ---> TCP Client / JohnnyFive Arduino cont
 Components
 ----------
 
-There are four components to this project:
+There are five components to this project:
 
-1.  Arduino 
-2.  Node program running Johnny-Five & and a TCP client
-3.  Node server serving static files via HTTP, running Socket.io, and a TCP server
+1. Arduino 
+2. Node program running Johnny-Five & and a TCP client
+3. Node server serving static files via HTTP, running Socket.io, and a TCP server
 4. Static webpage which uses Socket.io to connect to the server.
+5. A UDK interface which sends TCP commands to the server.
 
 Getting started
 ---------------
