@@ -21,25 +21,16 @@ function makeServo(opts) {
   return servo;
 }
 
-function initialMove() {
-  var boat = getServo(BOAT);
-  boat.move(boat.pos);
-  var boom = getServo(BOOM);
-  boom.move(boom.pos);
-  var hoist = getServo(HOIST);
-  hoist.move(hoist.pos);
-  var truck = getServo(TRUCK);
-  truck.move(truck.pos);
-  console.log('Setting initial servo positions.');
-}
-
-function printCurrentPos() {
+// Find Servo given a pin
+function getServo(name) {
+  var found = '';
   for (i in jServos) {
-    var servo = jServos[i];
-    console.log('SERVO: '+servo.label+' CURRENT POS: '+servo.pos);
+    if (jServos[i].name == name) {
+      found = jServos[i];
+    }
   }
+  return found;
 }
-
 // Initialize array of Servo objects.
 function setServos() {
   //BOOM
@@ -81,15 +72,16 @@ function setServos() {
   setTimeout(initialMove(),1000);
 }
 
-// Find Servo given a pin
-function getServo(name) {
-  var found = '';
-  for (i in jServos) {
-    if (jServos[i].name == name) {
-      found = jServos[i];
-    }
-  }
-  return found;
+function initialMove() {
+  var boat = getServo(BOAT);
+  boat.move(boat.pos);
+  var boom = getServo(BOOM);
+  boom.move(boom.pos);
+  var hoist = getServo(HOIST);
+  hoist.move(hoist.pos);
+  var truck = getServo(TRUCK);
+  truck.move(truck.pos);
+  console.log('Setting initial servo positions.');
 }
 
 // Hearbeat tracking
